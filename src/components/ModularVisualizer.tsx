@@ -185,6 +185,7 @@ export const ModularVisualizer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [strength, setStrength] = useState(0.5);
   const analyzer = useMemo(() => new AudioAnalyzer(), []);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -354,14 +355,28 @@ export const ModularVisualizer: React.FC = () => {
           </>
         )}
 
-        {/* Spacer + export */}
-        <div style={{ marginLeft: 'auto' }}>
-          {hasData && (
-            <button onClick={exportBlenderJSON} style={btn()}>
-              ↓ Blender JSON
-            </button>
-          )}
+        {/* Strength slider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+          <label style={{ fontSize: '12px', color: tokens.textMuted, whiteSpace: 'nowrap' }}>
+            Strength {Math.round(strength * 100)}%
+          </label>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={strength}
+            onChange={(e) => setStrength(parseFloat(e.target.value))}
+            style={{ width: '90px', accentColor: tokens.accent, cursor: 'pointer' }}
+          />
         </div>
+
+        {/* Export */}
+        {hasData && (
+          <button onClick={exportBlenderJSON} style={btn()}>
+            ↓ Blender JSON
+          </button>
+        )}
       </div>
 
       {/* Error */}
@@ -377,9 +392,9 @@ export const ModularVisualizer: React.FC = () => {
           <ambientLight intensity={0.7} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} castShadow />
           <pointLight position={[-10, -10, -10]} color="#99ccff" />
-          <VisualizerBlob analyzer={analyzer} range="bass" color="#ffb7ce" position={[-3.5, 0, 0]} strength={0.4} />
-          <VisualizerBlob analyzer={analyzer} range="mid" color="#a2d2ff" position={[0, 0, 0]} strength={0.4} />
-          <VisualizerBlob analyzer={analyzer} range="treble" color="#ccffcc" position={[3.5, 0, 0]} strength={0.4} />
+          <VisualizerBlob analyzer={analyzer} range="bass" color="#ffb7ce" position={[-3.5, 0, 0]} strength={strength} />
+          <VisualizerBlob analyzer={analyzer} range="mid" color="#a2d2ff" position={[0, 0, 0]} strength={strength} />
+          <VisualizerBlob analyzer={analyzer} range="treble" color="#ccffcc" position={[3.5, 0, 0]} strength={strength} />
           <ContactShadows position={[0, -3, 0]} opacity={0.3} scale={15} blur={2.5} far={4} />
           <Environment preset="studio" />
         </Canvas>
