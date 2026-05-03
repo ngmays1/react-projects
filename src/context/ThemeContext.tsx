@@ -71,8 +71,8 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'light',
-  tokens: light,
+  theme: 'twilight',
+  tokens: twilight,
   toggle: () => {},
 });
 
