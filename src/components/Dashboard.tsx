@@ -116,7 +116,7 @@ const BOOKMARKS: BookmarkCategory[] = [
   }
 ];
 
-const FlameDashboard: React.FC = () => {
+const HomeDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [time, setTime] = useState<Date | null>(null);
 
@@ -258,4 +258,4 @@ const FlameDashboard: React.FC = () => {
   );
 };
 
-export default FlameDashboard;
+export default HomeDashboard;

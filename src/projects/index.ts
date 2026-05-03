@@ -33,7 +33,7 @@ export const projects: Project[] = [
     title: 'Audio Visualizer',
     description:
       'modular audio visualizer',
-    tags: ['React', 'TypeScript'],
+    tags: ['React', 'Speech', 'TypeScript'],
     Component: ModularVisualizer,
   }
 ]
