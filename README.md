@@ -15,8 +15,13 @@ Backwords is a React-based utility that reverses text while preserving phonetic 
 - **Styling:** CSS-in-JS / Standard CSS
 - **Speech API:** Web Speech API (SpeechSynthesis)
 
-## 🚀 Getting Started
 
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/ngmays1/backwords.git
+# DASHBOARD
+### Customized landing page for homelab
+
+This dashboard was created as a startpage for your self hosted server. Easily manage your apps and bookmarks with built-in editors. 
+
+## 🛠️ Tech Stack
+- **Framework:** React 18
+- **Language:** TypeScript
+- **Styling:** CSS-in-JS / Standard CSS
