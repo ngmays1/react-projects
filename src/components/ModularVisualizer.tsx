@@ -121,7 +121,7 @@ class AudioAnalyzer {
 }
 
 // --- 2. Blob Component ---
-const VisualizerBlob: React.FC<VisualizerBlobProps> = ({ analyzer, range, color, position, strength = 1 }) => {
+const VisualizerBlob: React.FC<VisualizerBlobProps> = ({ analyzer, range, color, position, strength = .5 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const materialRef = useRef<any>(null!);
   const vec = new THREE.Vector3();
