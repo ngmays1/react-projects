@@ -1,6 +1,7 @@
 import { ComponentType } from 'react'
 import TextReverser from '../components/TextReverser'
 import Dashboard from '../components/Dashboard'
+import ModularVisualizer from '../components/ModularVisualizer'
 
 export interface Project {
   id: string
@@ -26,5 +27,13 @@ export const projects: Project[] = [
       'generic dashboard landing page for applications on my homelab',
     tags: ['React', 'TypeScript'],
     Component: Dashboard,
+  },
+  {
+    id: 'modular-visualizer',
+    title: 'Audio Visualizer',
+    description:
+      'modular audio visualizer',
+    tags: ['React', 'TypeScript'],
+    Component: ModularVisualizer,
   }
 ]

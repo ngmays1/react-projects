@@ -1,6 +1,8 @@
 import React, { useState, CSSProperties } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 const TextReverser: React.FC = () => {
+  const { tokens } = useTheme();
   const [inputText, setInputText] = useState<string>('');
   const [outputText, setOutputText] = useState<string>('');
   const [smartMode, setSmartMode] = useState<boolean>(true);
@@ -8,21 +10,13 @@ const TextReverser: React.FC = () => {
   const reverseLogic = (text: string): string => {
     if (!text) return '';
 
-    // 1. Define phonetic units (digraphs/trigraphs) to keep together
-    // ch, sh, th, ph, wh, ng, gh, ck, qu, tch, dge
     const clusterRegex = /tch|dge|ch|sh|th|ph|wh|ng|gh|ck|qu|kn|wr|./gi;
 
     const reverseWord = (word: string) => {
-      // Find the capitalization pattern of the original word
       const isCapitalized = word[0] === word[0].toUpperCase() && word.length > 1;
-      
-      // Tokenize the word into characters and clusters
       const tokens = word.match(clusterRegex) || [];
       const reversedTokens = tokens.reverse();
-
       let result = reversedTokens.join('').toLowerCase();
-
-      // Re-apply capitalization if original was Title Case
       if (isCapitalized && result.length > 0) {
         result = result.charAt(0).toUpperCase() + result.slice(1);
       }
@@ -30,44 +24,37 @@ const TextReverser: React.FC = () => {
     };
 
     if (smartMode) {
-      // Split by words to handle them individually (sounds better for speech)
       return text.split(/(\s+)/).map(segment => {
-        // Only reverse if it's a word (not whitespace or punctuation)
-        if (/\w/.test(segment)) {
-          return reverseWord(segment);
-        }
-        return segment; // Keep whitespace as is
+        if (/\w/.test(segment)) return reverseWord(segment);
+        return segment;
       }).join('');
     }
 
-    // Fallback: Simple character reversal
     return text.split('').reverse().join('');
   };
 
-  const handleReverse = (): void => {
-    setOutputText(reverseLogic(inputText));
-  };
+  const handleReverse = (): void => setOutputText(reverseLogic(inputText));
 
   const handleSpeak = (): void => {
     if (!outputText) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(outputText);
-    utterance.rate = 0.85; // Slightly slower for clarity
+    utterance.rate = 0.85;
     utterance.pitch = 1.0;
     window.speechSynthesis.speak(utterance);
   };
 
-  // Styles
   const styles: Record<string, CSSProperties> = {
     container: {
       maxWidth: '600px',
       margin: '40px auto',
       padding: '30px',
       fontFamily: 'Inter, system-ui, sans-serif',
-      backgroundColor: '#ffffff',
+      backgroundColor: tokens.surface,
       borderRadius: '16px',
-      boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
-      border: '1px solid #f0f0f0'
+      boxShadow: tokens.shadow,
+      border: `1px solid ${tokens.border}`,
+      transition: 'background-color 0.3s, border-color 0.3s',
     },
     label: {
       display: 'flex',
@@ -75,31 +62,33 @@ const TextReverser: React.FC = () => {
       gap: '8px',
       marginBottom: '15px',
       fontSize: '14px',
-      color: '#666',
-      cursor: 'pointer'
+      color: tokens.textSecondary,
+      cursor: 'pointer',
     },
     textarea: {
       width: '100%',
       height: '120px',
       padding: '15px',
       borderRadius: '10px',
-      border: '2px solid #e0e0e0',
+      border: `2px solid ${tokens.border}`,
       fontSize: '18px',
       marginBottom: '15px',
       outline: 'none',
-      transition: 'border-color 0.2s',
+      transition: 'border-color 0.2s, background-color 0.3s',
+      backgroundColor: tokens.bg,
+      color: tokens.textPrimary,
     },
     buttonGroup: { display: 'flex', gap: '12px', marginBottom: '25px' },
     primaryBtn: {
       flex: 2,
       padding: '14px',
-      backgroundColor: '#4F46E5',
-      color: 'white',
+      backgroundColor: tokens.accent,
+      color: tokens.accentFg,
       border: 'none',
       borderRadius: '8px',
       cursor: 'pointer',
       fontWeight: '600',
-      fontSize: '16px'
+      fontSize: '16px',
     },
     secondaryBtn: {
       flex: 1,
@@ -110,25 +99,26 @@ const TextReverser: React.FC = () => {
       borderRadius: '8px',
       cursor: 'pointer',
       fontWeight: '600',
-      fontSize: '16px'
+      fontSize: '16px',
     },
     outputBox: {
       padding: '20px',
-      backgroundColor: '#F9FAFB',
+      backgroundColor: tokens.surfaceHover,
       borderRadius: '10px',
       minHeight: '80px',
-      border: '1px dashed #D1D5DB',
+      border: `1px dashed ${tokens.border}`,
       fontSize: '24px',
       textAlign: 'center',
-      color: '#111827',
-      lineHeight: '1.4'
-    }
+      color: tokens.textPrimary,
+      lineHeight: '1.4',
+      transition: 'background-color 0.3s, border-color 0.3s',
+    },
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={{ textAlign: 'center', margin: '0 0 20px 0', color: '#111827' }}>Phonetic Reverser</h1>
-      
+      <h1 style={{ textAlign: 'center', margin: '0 0 20px 0', color: tokens.textPrimary }}>Phonetic Reverser</h1>
+
       <textarea
         style={styles.textarea}
         placeholder="Type something like 'Cheese and Ships'..."
@@ -137,10 +127,10 @@ const TextReverser: React.FC = () => {
       />
 
       <label style={styles.label}>
-        <input 
-          type="checkbox" 
-          checked={smartMode} 
-          onChange={(e) => setSmartMode(e.target.checked)} 
+        <input
+          type="checkbox"
+          checked={smartMode}
+          onChange={(e) => setSmartMode(e.target.checked)}
         />
         Smart Mode (Keep sounds like 'ch' and 'sh' together)
       </label>
@@ -151,10 +141,10 @@ const TextReverser: React.FC = () => {
       </div>
 
       <div style={styles.outputBox}>
-        {outputText || <span style={{ color: '#9CA3AF', fontSize: '18px' }}>Waiting for input...</span>}
+        {outputText || <span style={{ color: tokens.textMuted, fontSize: '18px' }}>Waiting for input...</span>}
       </div>
-      
-      <p style={{ fontSize: '12px', color: '#999', marginTop: '15px', textAlign: 'center' }}>
+
+      <p style={{ fontSize: '12px', color: tokens.textMuted, marginTop: '15px', textAlign: 'center' }}>
         Try: "The cheese is sharp" → "Eht eseech si prahs"
       </p>
     </div>

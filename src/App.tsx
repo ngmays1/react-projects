@@ -1,25 +1,7 @@
 import { useState, CSSProperties } from 'react'
+import { Moon, Sun } from 'lucide-react'
 import { projects, Project } from './projects'
-
-const TAG_COLORS: Record<string, { bg: string; text: string }> = {
-  Text:       { bg: '#EEF2FF', text: '#4338CA' },
-  Speech:     { bg: '#ECFDF5', text: '#065F46' },
-  TypeScript: { bg: '#EFF6FF', text: '#1D4ED8' },
-  default:    { bg: '#F3F4F6', text: '#374151' },
-}
-
-function tagStyle(tag: string): CSSProperties {
-  const colors = TAG_COLORS[tag] ?? TAG_COLORS.default
-  return {
-    backgroundColor: colors.bg,
-    color: colors.text,
-    fontSize: '11px',
-    fontWeight: 600,
-    padding: '3px 8px',
-    borderRadius: '999px',
-    letterSpacing: '0.02em',
-  }
-}
+import { useTheme } from './context/ThemeContext'
 
 function ProjectCard({
   project,
@@ -28,19 +10,31 @@ function ProjectCard({
   project: Project
   onSelect: () => void
 }) {
+  const { tokens } = useTheme()
   const [hovered, setHovered] = useState(false)
+
+  const tagStyle = (tag: string): CSSProperties => {
+    const colors = tokens.tags[tag] ?? tokens.tags.default
+    return {
+      backgroundColor: colors.bg,
+      color: colors.text,
+      fontSize: '11px',
+      fontWeight: 600,
+      padding: '3px 8px',
+      borderRadius: '999px',
+      letterSpacing: '0.02em',
+    }
+  }
 
   return (
     <div
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: tokens.surface,
         borderRadius: '14px',
         padding: '24px',
-        border: '1px solid #E5E7EB',
-        boxShadow: hovered
-          ? '0 8px 24px rgba(0,0,0,0.10)'
-          : '0 2px 8px rgba(0,0,0,0.05)',
-        transition: 'box-shadow 0.2s, transform 0.2s',
+        border: `1px solid ${tokens.border}`,
+        boxShadow: hovered ? tokens.shadowHover : tokens.shadow,
+        transition: 'box-shadow 0.2s, transform 0.2s, background-color 0.3s',
         transform: hovered ? 'translateY(-2px)' : 'none',
         display: 'flex',
         flexDirection: 'column',
@@ -51,10 +45,10 @@ function ProjectCard({
       onMouseLeave={() => setHovered(false)}
       onClick={onSelect}
     >
-      <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>
+      <h2 style={{ fontSize: '18px', fontWeight: 700, color: tokens.textPrimary }}>
         {project.title}
       </h2>
-      <p style={{ fontSize: '14px', color: '#6B7280', lineHeight: 1.6, flexGrow: 1 }}>
+      <p style={{ fontSize: '14px', color: tokens.textSecondary, lineHeight: 1.6, flexGrow: 1 }}>
         {project.description}
       </p>
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
@@ -68,14 +62,15 @@ function ProjectCard({
         style={{
           marginTop: '4px',
           padding: '10px 0',
-          backgroundColor: '#4F46E5',
-          color: '#fff',
+          backgroundColor: tokens.accent,
+          color: tokens.accentFg,
           border: 'none',
           borderRadius: '8px',
           fontWeight: 600,
           fontSize: '14px',
           cursor: 'pointer',
           width: '100%',
+          transition: 'opacity 0.2s',
         }}
       >
         Open Project →
@@ -85,16 +80,16 @@ function ProjectCard({
 }
 
 export default function App() {
+  const { tokens, theme, toggle } = useTheme()
   const [activeId, setActiveId] = useState<string | null>(null)
   const active = projects.find((p) => p.id === activeId) ?? null
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: tokens.bg, transition: 'background-color 0.3s, color 0.3s', color: tokens.textPrimary }}>
       <header
         style={{
-          backgroundColor: '#fff',
-          borderBottom: '1px solid #E5E7EB',
+          backgroundColor: tokens.header,
+          borderBottom: `1px solid ${tokens.border}`,
           padding: '0 32px',
           height: '64px',
           display: 'flex',
@@ -103,6 +98,7 @@ export default function App() {
           position: 'sticky',
           top: 0,
           zIndex: 10,
+          transition: 'background-color 0.3s, border-color 0.3s',
         }}
       >
         <button
@@ -120,58 +116,80 @@ export default function App() {
             style={{
               width: '32px',
               height: '32px',
-              backgroundColor: '#4F46E5',
+              backgroundColor: tokens.accent,
               borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff',
+              color: tokens.accentFg,
               fontSize: '16px',
             }}
           >
             ↩
           </span>
-          <span style={{ fontWeight: 700, fontSize: '18px', color: '#111827' }}>
+          <span style={{ fontWeight: 700, fontSize: '18px', color: tokens.textPrimary }}>
             Projects
           </span>
         </button>
 
-        {active && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {active && (
+            <button
+              onClick={() => setActiveId(null)}
+              style={{
+                background: 'none',
+                border: `1px solid ${tokens.border}`,
+                borderRadius: '8px',
+                padding: '6px 14px',
+                fontSize: '14px',
+                color: tokens.textSecondary,
+                cursor: 'pointer',
+                fontWeight: 500,
+                transition: 'border-color 0.2s, color 0.2s',
+              }}
+            >
+              ← All Projects
+            </button>
+          )}
+
           <button
-            onClick={() => setActiveId(null)}
+            onClick={toggle}
+            title={theme === 'light' ? 'Switch to Twilight' : 'Switch to Light'}
             style={{
-              background: 'none',
-              border: '1px solid #E5E7EB',
-              borderRadius: '8px',
-              padding: '6px 14px',
-              fontSize: '14px',
-              color: '#6B7280',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '36px',
+              height: '36px',
+              background: tokens.surface,
+              border: `1px solid ${tokens.border}`,
+              borderRadius: '50%',
               cursor: 'pointer',
-              fontWeight: 500,
+              color: tokens.textSecondary,
+              transition: 'background-color 0.2s, border-color 0.2s, color 0.2s',
+              flexShrink: 0,
             }}
           >
-            ← All Projects
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
-        )}
+        </div>
       </header>
 
       <main style={{ flex: 1, padding: '48px 32px', maxWidth: '960px', margin: '0 auto', width: '100%' }}>
         {active ? (
-          // Project view
           <div>
-            <p style={{ fontSize: '13px', color: '#9CA3AF', marginBottom: '8px' }}>
+            <p style={{ fontSize: '13px', color: tokens.textMuted, marginBottom: '8px' }}>
               Projects / {active.title}
             </p>
             <active.Component />
           </div>
         ) : (
-          // Showcase grid
           <>
             <div style={{ marginBottom: '40px' }}>
-              <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#111827', marginBottom: '8px' }}>
+              <h1 style={{ fontSize: '32px', fontWeight: 800, color: tokens.textPrimary, marginBottom: '8px' }}>
                 Projects
               </h1>
-              <p style={{ fontSize: '16px', color: '#6B7280' }}>
+              <p style={{ fontSize: '16px', color: tokens.textSecondary }}>
                 A collection of small interactive experiments.
               </p>
             </div>
