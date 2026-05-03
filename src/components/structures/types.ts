@@ -17,5 +17,6 @@ export interface VisualizerBlobProps {
   range: FrequencyRange;
   color: string;
   position: [number, number, number];
-  strength?: number; // 0–1, default 1
+  strength?: number; // 0–1, scales reactivity
+  size?: number;     // multiplier on resting radius, default 1
 }

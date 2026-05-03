@@ -121,7 +121,7 @@ class AudioAnalyzer {
 }
 
 // --- 2. Blob Component ---
-const VisualizerBlob: React.FC<VisualizerBlobProps> = ({ analyzer, range, color, position, strength = .5 }) => {
+const VisualizerBlob: React.FC<VisualizerBlobProps> = ({ analyzer, range, color, position, strength = 0.5, size = 1 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const materialRef = useRef<any>(null!);
   const vec = new THREE.Vector3();
@@ -131,7 +131,7 @@ const VisualizerBlob: React.FC<VisualizerBlobProps> = ({ analyzer, range, color,
     const frameIndex = Math.floor(state.clock.elapsedTime * 60);
     const data = analyzer.getFrequencyData(frameIndex);
     const value = data[range] * strength;
-    const s = 1 + value * 2;
+    const s = size * (1 + value * 2);
     meshRef.current.scale.lerp(vec.set(s, s, s), 0.1);
     if (materialRef.current) {
       materialRef.current.distort = THREE.MathUtils.lerp(materialRef.current.distort, 0.3 + value * 1.5, 0.1);
@@ -185,7 +185,10 @@ export const ModularVisualizer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [strength, setStrength] = useState(0.5);
+  const [size, setSize] = useState(1.0);
+  const [bassStrength, setBassStrength] = useState(0.5);
+  const [midStrength, setMidStrength] = useState(0.5);
+  const [trebleStrength, setTrebleStrength] = useState(0.5);
   const analyzer = useMemo(() => new AudioAnalyzer(), []);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -355,20 +358,30 @@ export const ModularVisualizer: React.FC = () => {
           </>
         )}
 
-        {/* Strength slider */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-          <label style={{ fontSize: '12px', color: tokens.textMuted, whiteSpace: 'nowrap' }}>
-            Strength {Math.round(strength * 100)}%
-          </label>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={strength}
-            onChange={(e) => setStrength(parseFloat(e.target.value))}
-            style={{ width: '90px', accentColor: tokens.accent, cursor: 'pointer' }}
-          />
+        {/* Viz controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginLeft: 'auto', flexWrap: 'wrap' }}>
+          {[
+            { label: 'Size', color: tokens.accent, value: size, set: setSize, min: 0.3, max: 1.8, step: 0.05 },
+            { label: 'Bass', color: '#ffb7ce', value: bassStrength, set: setBassStrength, min: 0, max: 1, step: 0.05 },
+            { label: 'Mid', color: '#a2d2ff', value: midStrength, set: setMidStrength, min: 0, max: 1, step: 0.05 },
+            { label: 'Treble', color: '#ccffcc', value: trebleStrength, set: setTrebleStrength, min: 0, max: 1, step: 0.05 },
+          ].map(({ label, color, value, set, min, max, step }) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: color, flexShrink: 0 }} />
+              <label style={{ fontSize: '12px', color: tokens.textMuted, whiteSpace: 'nowrap', minWidth: '60px' }}>
+                {label} {Math.round(value * 100)}%
+              </label>
+              <input
+                type="range"
+                min={min}
+                max={max}
+                step={step}
+                value={value}
+                onChange={(e) => set(parseFloat(e.target.value))}
+                style={{ width: '80px', accentColor: color, cursor: 'pointer' }}
+              />
+            </div>
+          ))}
         </div>
 
         {/* Export */}
@@ -392,9 +405,9 @@ export const ModularVisualizer: React.FC = () => {
           <ambientLight intensity={0.7} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} castShadow />
           <pointLight position={[-10, -10, -10]} color="#99ccff" />
-          <VisualizerBlob analyzer={analyzer} range="bass" color="#ffb7ce" position={[-3.5, 0, 0]} strength={strength} />
-          <VisualizerBlob analyzer={analyzer} range="mid" color="#a2d2ff" position={[0, 0, 0]} strength={strength} />
-          <VisualizerBlob analyzer={analyzer} range="treble" color="#ccffcc" position={[3.5, 0, 0]} strength={strength} />
+          <VisualizerBlob analyzer={analyzer} range="bass" color="#ffb7ce" position={[-3.5, 0, 0]} strength={bassStrength} size={size} />
+          <VisualizerBlob analyzer={analyzer} range="mid" color="#a2d2ff" position={[0, 0, 0]} strength={midStrength} size={size} />
+          <VisualizerBlob analyzer={analyzer} range="treble" color="#ccffcc" position={[3.5, 0, 0]} strength={trebleStrength} size={size} />
           <ContactShadows position={[0, -3, 0]} opacity={0.3} scale={15} blur={2.5} far={4} />
           <Environment preset="studio" />
         </Canvas>

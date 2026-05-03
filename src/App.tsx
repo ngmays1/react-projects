@@ -170,7 +170,7 @@ export default function App() {
               flexShrink: 0,
             }}
           >
-            {theme === 'twilight' ? <Moon size={16} /> : <Sun size={16} />}
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
         </div>
       </header>
