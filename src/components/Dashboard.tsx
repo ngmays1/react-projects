@@ -42,7 +42,7 @@ const APPS: AppItem[] = [
   { 
     id: 'jellyfin', 
     name: 'jellyfin', 
-    url: 'http://loxbox.cinnebar-snake.ts.net:8096', 
+    url: 'http://jellyfin:8096', 
     icon: <Terminal size={24} />, 
     description: 'media',
     newTab: true 
@@ -50,7 +50,7 @@ const APPS: AppItem[] = [
   { 
     id: 'navidrome', 
     name: 'navidrome', 
-    url: 'http://loxbox.cinnebar-snake.ts.net:8096:4533', 
+    url: 'http://navidrome:8096:4533', 
     icon: <Cpu size={24} />, 
     description: 'music',
     newTab: true 
@@ -58,7 +58,7 @@ const APPS: AppItem[] = [
   { 
     id: 'freshrss', 
     name: 'freshrss', 
-    url: 'https://loxbox.cinnebar-snake.ts.net:8085', 
+    url: 'https://rssfeed:8085', 
     icon: <Tv size={24} />, 
     description: 'newsfeed',
     newTab: true 
@@ -66,7 +66,7 @@ const APPS: AppItem[] = [
   { 
     id: 'romm', 
     name: 'romm', 
-    url: 'http://loxbox.cinnebar-snake.ts.net:8081', 
+    url: 'http://games:8081', 
     icon: <Shield size={24} />, 
     description: 'retro gaming',
     newTab: true 
@@ -74,19 +74,11 @@ const APPS: AppItem[] = [
   { 
     id: 'komga', 
     name: 'komga', 
-    url: 'http://loxbox.cinnebar-snake.ts.net:25600', 
+    url: 'http://ereader:25600', 
     icon: <Cloud size={24} />, 
     description: 'ebooks',
     newTab: true 
-  },
-  { 
-    id: 'blog', 
-    name: 'blog', 
-    url: 'http://loxbox.cinnebar-snake.ts.net:3000/portfolio', 
-    icon: <Cloud size={24} />, 
-    description: 'dev space for blog/portfolio',
-    newTab: true 
-  },
+  }
 ];
 
 const BOOKMARKS: BookmarkCategory[] = [
@@ -95,15 +87,14 @@ const BOOKMARKS: BookmarkCategory[] = [
     links: [
       { name: 'github', url: 'https://github.com/ngmays1', newTab: true },
       { name: 'linkedin', url: 'https://linkedin.com/in/nicolas-mays', newTab: true },
-      { name: 'photos', url: 'https://www.npmjs.com', newTab: true },
     ]
   },
   {
     title: 'Blogs',
     links: [
-      { name: 'kottke', url: 'https://kottke.org', newTab: true },
-      { name: 'juni', url: 'https://juni-mp4.bearblog.dev/83-rescuing-me/', newTab: true },
-      { name: 'bubbles', url: 'https://bubbles.town', newTab: true },
+      { name: 'test', url: 'https://test.org', newTab: true },
+      { name: 'test', url: 'https://test.org', newTab: true },
+      { name: 'test', url: 'https://test.org', newTab: true },
     ]
   },
   {
