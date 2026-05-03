@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, ChangeEvent, CSSProperties } from 'react';
+import React, { useState, CSSProperties } from 'react';
 
 const TextReverser: React.FC = () => {
   const [inputText, setInputText] = useState<string>('');
