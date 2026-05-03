@@ -1,5 +1,6 @@
 import { ComponentType } from 'react'
 import TextReverser from '../components/TextReverser'
+import Dashboard from '../components/Dashboard'
 
 export interface Project {
   id: string
@@ -18,4 +19,12 @@ export const projects: Project[] = [
     tags: ['Text', 'Speech', 'TypeScript'],
     Component: TextReverser,
   },
+  {
+    id: 'dashboard',
+    title: 'Dashboard',
+    description:
+      'generic dashboard landing page for applications on my homelab',
+    tags: ['React', 'TypeScript'],
+    Component: Dashboard,
+  }
 ]

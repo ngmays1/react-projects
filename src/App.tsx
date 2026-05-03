@@ -132,7 +132,7 @@ export default function App() {
             ↩
           </span>
           <span style={{ fontWeight: 700, fontSize: '18px', color: '#111827' }}>
-            Backwords
+            Projects
           </span>
         </button>
 
