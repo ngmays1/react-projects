@@ -13,7 +13,6 @@ import {
   Tv,
   Shield,
   Cloud,
-  Globe
 } from 'lucide-react';
 
 // --- Types & Interfaces ---
