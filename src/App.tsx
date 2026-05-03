@@ -154,7 +154,7 @@ export default function App() {
 
           <button
             onClick={toggle}
-            title={theme === 'light' ? 'Switch to Twilight' : 'Switch to Light'}
+            title={theme === 'twilight' ? 'Switch to Twilight' : 'Switch to Light'}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -170,7 +170,7 @@ export default function App() {
               flexShrink: 0,
             }}
           >
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            {theme === 'twilight' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
         </div>
       </header>
