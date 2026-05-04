@@ -77,7 +77,7 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('twilight');
 
   useEffect(() => {
     document.body.style.backgroundColor = themes[theme].bg;

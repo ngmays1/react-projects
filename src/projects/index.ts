@@ -2,6 +2,7 @@ import { ComponentType } from 'react'
 import TextReverser from '../components/TextReverser'
 import Dashboard from '../components/Dashboard'
 import ModularVisualizer from '../components/ModularVisualizer'
+import MusicStats from '../components/MusicStats'
 
 export interface Project {
   id: string
@@ -35,5 +36,13 @@ export const projects: Project[] = [
       'modular audio visualizer',
     tags: ['React', 'Speech', 'TypeScript'],
     Component: ModularVisualizer,
+  },
+  {
+    id: 'weekly-wrapped',
+    title: 'Wrap-Your-Week',
+    description:
+      'simple widget to display your top listened to tracks and albums',
+    tags: ['React', 'TypeScript'],
+    Component: MusicStats,
   }
 ]
