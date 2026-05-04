@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Carousel from './Carousel';
 import SongCard from './SongCard';
 import AlbumCard from './AlbumCard';
